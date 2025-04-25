@@ -11,7 +11,7 @@ IF /I NOT "%PASSWORD%" == "" goto :ValidPassword
 :ValidPassword
 
 REM === Add the user with the specified password
-call net user ansible "%PASSWORD%" /add /expires:never
+call net user ansible "%PASSWORD%" /add /expires:never /Y
 
 REM === Add the ansible user to the Administrators group
 call net localgroup Administrators ansible /add
