@@ -27,6 +27,14 @@ hdutil detach xcode_tools
 # Delete the installer disk image
 rm Command_Line_Tools_for_Xcode.dmg
 
-# Install Homebrew
-# NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+# Add Homebrew and python3 binaries to path
+export PATH="$HOME/Library/Python/3.9/bin:/opt/homebrew/bin:$PATH"
 
+# Upgrade pip
+sudo pip3 install --upgrade pip
+
+# Install Ansible
+pip3 install ansible
+
+# Enable ssh access
+sudo systemsetup -setremotelogin on
