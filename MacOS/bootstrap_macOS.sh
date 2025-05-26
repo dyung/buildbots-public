@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Extract the OS version number
 OS_MAJOR_VERSION=`sw_vers | grep ProductVersion | cut -f 2 -w | cut -f 1 -d .`
@@ -38,3 +38,31 @@ pip3 install ansible
 
 # Enable ssh access
 sudo systemsetup -setremotelogin on
+
+# Create the ssh directories
+mkdir ~/.ssh
+chmod 700 ~/.ssh
+mkdir ~/.ssh/github
+chmod 755 ~/.ssh/github
+
+# Pause script to copy over ssh keys
+read -p "Copy ssh key to ~/.ssh/github/id_rsa and hit [Enter] to continue"
+
+# Lock down ssh key correctly
+chmod 600 ~/.ssh/github/id_rsa
+
+# Create the ssh config file
+touch ~/.ssh/config
+chmod 644 ~/.ssh/config
+echo "Host github.com" > ~/.ssh/config
+echo "\tHostname github.com" >> ~/.ssh/config
+echo "\tUser git" >> ~/.ssh/config
+echo "\tPreferredAuthentications publickey" >> ~/.ssh/config
+echo "\tIdentityFile ~/.ssh/github/id_rsa" >> ~/.ssh/config
+
+# Clone the repos
+mkdir ~/src/mac-dev-playbook
+git clone git@github.com:dyung/mac-dev-playbook.git ~/src/mac-dev-playbook
+
+mkdir ~/src/buildbots
+git clone git@github.com:dyung/buildbots.git ~/src/buildbots
