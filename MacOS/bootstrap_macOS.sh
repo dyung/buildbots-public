@@ -49,10 +49,8 @@ chmod 700 ~/.ssh
 mkdir ~/.ssh/github
 chmod 755 ~/.ssh/github
 
-# Pause script to copy over ssh keys
-read -p "Copy ssh key to ~/.ssh/github/id_rsa and hit [Enter] to continue"
-
 # Lock down ssh key correctly
+touch ~/.ssh/github/id_rsa
 chmod 600 ~/.ssh/github/id_rsa
 
 # Create the ssh config file
@@ -64,9 +62,6 @@ echo "\tUser git" >> ~/.ssh/config
 echo "\tPreferredAuthentications publickey" >> ~/.ssh/config
 echo "\tIdentityFile ~/.ssh/github/id_rsa" >> ~/.ssh/config
 
-# Clone the repos
-mkdir ~/src/mac-dev-playbook
-git clone git@github.com:dyung/mac-dev-playbook.git ~/src/mac-dev-playbook
+echo "Copy over the ssh key to ~/.ssh/github/id_rsa"
 
-mkdir ~/src/buildbots
-git clone git@github.com:dyung/buildbots.git ~/src/buildbots
+exit 0
