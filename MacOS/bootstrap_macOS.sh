@@ -22,7 +22,7 @@ hdiutil attach -mountpoint xcode_tools Command_Line_Tools_for_Xcode.dmg
 sudo installer -verbose -package "xcode_tools/Command Line Tools.pkg" -target /
 
 # Dismount the disk image
-hdutil detach xcode_tools
+hdiutil detach xcode_tools
 
 # Delete the installer disk image
 rm Command_Line_Tools_for_Xcode.dmg
