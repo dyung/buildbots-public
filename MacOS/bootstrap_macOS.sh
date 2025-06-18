@@ -1,8 +1,12 @@
-#!/bin/bash
+q#!/bin/bash
 
 # Extract the OS version number
 OS_MAJOR_VERSION=`sw_vers | grep ProductVersion | cut -f 2 -w | cut -f 1 -d .`
 echo OS_MAJOR_VERSION=${OS_MAJOR_VERSION}
+
+# Extract the OS architecture
+OS_ARCH=`uname -m`
+echo OS_ARCH=${OS_ARCH}
 
 if [ ${OS_MAJOR_VERSION} = "14" ]; then
     echo Detected major OS version 14
@@ -43,14 +47,27 @@ sudo systemsetup -setremotelogin on
 sudo defaults write /var/db/launchd.db/com.apple.launchd/overrides.plist com.apple.screensharing -dict Disabled -bool false
 sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.screensharing.plist
 
+# Temporarily download 1Password-cli static version for bootstrapping
+if [ ${OS_ARCH} = "arm64" ]; then
+    OPCLI_DOWNLOAD=https://cache.agilebits.com/dist/1P/op2/pkg/v2.31.1/op_darwin_arm64_v2.31.1.zip
+else
+    OPCLI_DOWNLOAD=https://cache.agilebits.com/dist/1P/op2/pkg/v2.31.1/op_darwin_amd64_v2.31.1.zip
+fi
+curl -L -o op_darwin_v2.31.1.zip "${OPCLI_DOWNLOAD}"
+
+# Extract the binary
+mkdir op-cli
+unzip op_darwin_v2.31.1.zip -d op-cli
+
 # Create the ssh directories
 mkdir ~/.ssh
 chmod 700 ~/.ssh
 mkdir ~/.ssh/github
 chmod 755 ~/.ssh/github
 
+# Extract ssh key from 1password:
+./op-cli/./op read "op://Github SSH Key/Github SSH Key/private key" > ~/.ssh/github/id_rsa
 # Lock down ssh key correctly
-touch ~/.ssh/github/id_rsa
 chmod 600 ~/.ssh/github/id_rsa
 
 # Create the ssh config file
@@ -61,7 +78,5 @@ echo "\tHostname github.com" >> ~/.ssh/config
 echo "\tUser git" >> ~/.ssh/config
 echo "\tPreferredAuthentications publickey" >> ~/.ssh/config
 echo "\tIdentityFile ~/.ssh/github/id_rsa" >> ~/.ssh/config
-
-echo "Copy over the ssh key to ~/.ssh/github/id_rsa"
 
 exit 0
