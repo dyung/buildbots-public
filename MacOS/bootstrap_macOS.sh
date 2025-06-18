@@ -70,6 +70,10 @@ chmod 755 ~/.ssh/github
 # Lock down ssh key correctly
 chmod 600 ~/.ssh/github/id_rsa
 
+# Cleanup 1Password-cli used for bootstrapping
+rm -Rf op-cli
+rm op_darwin_v2.31.1.zip
+
 # Create the ssh config file
 touch ~/.ssh/config
 chmod 644 ~/.ssh/config
