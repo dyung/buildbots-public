@@ -83,4 +83,8 @@ echo "\tUser git" >> ~/.ssh/config
 echo "\tPreferredAuthentications publickey" >> ~/.ssh/config
 echo "\tIdentityFile ~/.ssh/github/id_rsa" >> ~/.ssh/config
 
+mkdir ~/src
+mkdir ~/src/buildbots
+git clone git@github.com:dyung/buildbots.git ~/src/buildbots
+
 exit 0
